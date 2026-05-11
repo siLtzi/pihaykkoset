@@ -1,0 +1,95 @@
+{
+  "common": {
+    "readMore": "Read more",
+    "learnMore": "Learn more",
+    "contactUs": "Contact us",
+    "getStarted": "Get started",
+    "viewAll": "View all",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "success": "Success!",
+    "close": "Close"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "caseStudies": "Case Studies",
+    "blog": "Blog",
+    "contact": "Contact",
+    "team": "Our Team"
+  },
+  "footer": {
+    "copyright": "© {year} {company}. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "cookiePolicy": "Cookie Policy"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "company": "Company",
+    "subject": "Subject",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "success": "Thank you! Your message has been sent.",
+    "error": "Something went wrong. Please try again.",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address"
+  },
+  "services": {
+    "title": "Our Services",
+    "viewService": "View Service",
+    "relatedCaseStudies": "Related Case Studies"
+  },
+  "caseStudies": {
+    "title": "Case Studies",
+    "client": "Client",
+    "industry": "Industry",
+    "challenge": "The Challenge",
+    "solution": "Our Solution",
+    "results": "Results",
+    "testimonial": "What they said",
+    "viewCaseStudy": "View Case Study"
+  },
+  "team": {
+    "title": "Meet Our Team",
+    "role": "Role"
+  },
+  "testimonials": {
+    "title": "What Our Clients Say"
+  },
+  "blog": {
+    "title": "Blog",
+    "readingTime": "{minutes} min read",
+    "publishedOn": "Published on {date}",
+    "by": "By",
+    "category": "Category",
+    "relatedArticles": "Related Articles"
+  },
+  "404": {
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "goHome": "Go to Homepage"
+  },
+  "cookies": {
+    "message": "We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.",
+    "accept": "Accept",
+    "decline": "Decline",
+    "learnMore": "Learn more"
+  },
+  "form": {
+    "selectOption": "Select an option",
+    "fileUpload": "Upload file",
+    "dragDrop": "Drag and drop or click to upload",
+    "maxFileSize": "Max file size: {size}MB",
+    "acceptedFormats": "Accepted formats: {formats}"
+  }
+}

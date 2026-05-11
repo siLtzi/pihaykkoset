@@ -1,0 +1,95 @@
+{
+  "common": {
+    "readMore": "Lue lisää",
+    "learnMore": "Lisätietoja",
+    "contactUs": "Ota yhteyttä",
+    "getStarted": "Aloita",
+    "viewAll": "Näytä kaikki",
+    "back": "Takaisin",
+    "next": "Seuraava",
+    "previous": "Edellinen",
+    "submit": "Lähetä",
+    "loading": "Ladataan...",
+    "error": "Jotain meni pieleen",
+    "success": "Onnistui!",
+    "close": "Sulje"
+  },
+  "navigation": {
+    "home": "Etusivu",
+    "about": "Tietoa meistä",
+    "services": "Palvelut",
+    "caseStudies": "Referenssit",
+    "blog": "Blogi",
+    "contact": "Yhteystiedot",
+    "team": "Tiimimme"
+  },
+  "footer": {
+    "copyright": "© {year} {company}. Kaikki oikeudet pidätetään.",
+    "privacyPolicy": "Tietosuojakäytäntö",
+    "termsOfService": "Käyttöehdot",
+    "cookiePolicy": "Evästekäytäntö"
+  },
+  "contact": {
+    "title": "Ota yhteyttä",
+    "name": "Nimi",
+    "email": "Sähköposti",
+    "phone": "Puhelin",
+    "message": "Viesti",
+    "company": "Yritys",
+    "subject": "Aihe",
+    "send": "Lähetä viesti",
+    "sending": "Lähetetään...",
+    "success": "Kiitos! Viestisi on lähetetty.",
+    "error": "Jotain meni pieleen. Yritä uudelleen.",
+    "required": "Tämä kenttä on pakollinen",
+    "invalidEmail": "Anna kelvollinen sähköpostiosoite"
+  },
+  "services": {
+    "title": "Palvelumme",
+    "viewService": "Katso palvelu",
+    "relatedCaseStudies": "Liittyvät referenssit"
+  },
+  "caseStudies": {
+    "title": "Referenssit",
+    "client": "Asiakas",
+    "industry": "Toimiala",
+    "challenge": "Haaste",
+    "solution": "Ratkaisumme",
+    "results": "Tulokset",
+    "testimonial": "Asiakkaan kommentti",
+    "viewCaseStudy": "Katso referenssi"
+  },
+  "team": {
+    "title": "Tiimimme",
+    "role": "Rooli"
+  },
+  "testimonials": {
+    "title": "Asiakkaidemme kokemuksia"
+  },
+  "blog": {
+    "title": "Blogi",
+    "readingTime": "{minutes} min lukuaika",
+    "publishedOn": "Julkaistu {date}",
+    "by": "Kirjoittaja",
+    "category": "Kategoria",
+    "relatedArticles": "Aiheeseen liittyvät artikkelit"
+  },
+  "404": {
+    "title": "Sivua ei löytynyt",
+    "description": "Etsimääsi sivua ei ole olemassa tai se on siirretty.",
+    "goHome": "Palaa etusivulle"
+  },
+  "cookies": {
+    "message": "Käytämme evästeitä parantaaksemme käyttökokemustasi. Jatkamalla sivuston käyttöä hyväksyt evästeiden käytön.",
+    "accept": "Hyväksy",
+    "decline": "Hylkää",
+    "learnMore": "Lue lisää"
+  },
+  "form": {
+    "selectOption": "Valitse vaihtoehto",
+    "fileUpload": "Lataa tiedosto",
+    "dragDrop": "Vedä ja pudota tai klikkaa ladataksesi",
+    "maxFileSize": "Maksimi tiedostokoko: {size}MB",
+    "acceptedFormats": "Hyväksytyt muodot: {formats}"
+  }
+}
