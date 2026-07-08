@@ -48,7 +48,7 @@ export function CookieNotice({ enabled = true, text, linkText = 'Learn more' }: 
       <div className="container mx-auto flex flex-col items-center justify-between gap-4 sm:flex-row">
         <p className="text-sm text-gray-600">
           {text || 'We use cookies to improve your experience on our website.'}{' '}
-          <Link href="/privacy-policy" className="text-primary-600 underline hover:text-primary-700">
+          <Link href="/privacy-policy" className="text-accent underline hover:opacity-80">
             {linkText}
           </Link>
         </p>
@@ -61,7 +61,7 @@ export function CookieNotice({ enabled = true, text, linkText = 'Learn more' }: 
           </button>
           <button
             onClick={handleAccept}
-            className="rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-700"
+            className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
           >
             Accept
           </button>
