@@ -315,6 +315,10 @@ nav.primary a:hover::after { transform: scaleX(1); transform-origin: left; }
   .work-mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
   .tile-1 { grid-column: span 2; grid-row: span 2; }
   .tile-2, .tile-3, .tile-4, .tile-5, .tile-6 { grid-column: span 1; grid-row: span 1; }
+  /* If the last tile ends up alone in its row, stretch it full-width for symmetry.
+     tile-1 fills a 2×2 block, so the remaining tiles pair up in rows of 2 —
+     an even total (2, 4, 6) leaves the last one orphaned. */
+  .work-mosaic > .tile:last-child:nth-child(2n) { grid-column: 1 / -1; grid-row: span 2; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
   .contact-card { padding: 28px; }
   .site-footer { padding: 40px 20px 16px; }
