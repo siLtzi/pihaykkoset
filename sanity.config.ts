@@ -1,6 +1,6 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
-import { presentationTool } from 'sanity/presentation'
+import { presentationTool, defineLocations } from 'sanity/presentation'
 import { visionTool } from '@sanity/vision'
 import { schema } from './sanity/schemaTypes'
 import { structure, defaultDocumentNode } from './sanity/structure'
@@ -17,7 +17,7 @@ const SANITY_STUDIO_PREVIEW_URL = process.env.SANITY_STUDIO_PREVIEW_URL || 'http
 
 export default defineConfig({
   name: 'default',
-  title: 'Business Template CMS',
+  title: 'Pihaykköset CMS',
   
   projectId,
   dataset,
@@ -39,13 +39,24 @@ export default defineConfig({
       resolve: {
         // Resolve document URLs for the Presentation tool
         locations: {
-          page: (doc: { slug?: { current?: string }; isHomepage?: boolean }) => ({
-            locations: [
-              {
-                title: doc?.isHomepage ? 'Homepage' : (doc?.slug?.current || 'Page'),
-                href: doc?.isHomepage ? '/' : `/${doc?.slug?.current || ''}`,
-              },
-            ],
+          page: defineLocations({
+            select: { slug: 'slug.current', isHomepage: 'isHomepage', title: 'title' },
+            resolve: (doc) => ({
+              locations: [
+                {
+                  title: doc?.isHomepage
+                    ? 'Etusivu'
+                    : (doc?.title as string | undefined) || (doc?.slug as string | undefined) || 'Sivu',
+                  href: doc?.isHomepage ? '/' : `/${(doc?.slug as string | undefined) || ''}`,
+                },
+              ],
+            }),
+          }),
+          homePage: defineLocations({
+            select: { _id: '_id' },
+            resolve: () => ({
+              locations: [{ title: 'Etusivu', href: '/' }],
+            }),
           }),
         },
       },
@@ -59,8 +70,8 @@ export default defineConfig({
   document: {
     // Hide 'delete' action for singleton documents
     actions: (prev, context) => {
-      if (context.schemaType === 'siteSettings') {
-        return prev.filter(action => action.action !== 'delete')
+      if (context.schemaType === 'siteSettings' || context.schemaType === 'homePage') {
+        return prev.filter(action => action.action !== 'delete' && action.action !== 'duplicate')
       }
       return prev
     },

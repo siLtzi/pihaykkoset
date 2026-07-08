@@ -1,77 +1,62 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
+import type { Metadata } from 'next'
 import { setRequestLocale } from 'next-intl/server'
-import { getHomepage, getSiteSettings } from '@/sanity/lib/fetchers'
-import { SectionRenderer } from '@/components/sections'
+import { getHomePage, getSiteSettings } from '@/sanity/lib/fetchers'
 import { urlFor } from '@/sanity/lib/client'
+import { Hero } from '@/components/home/Hero'
+import { Marquee } from '@/components/home/Marquee'
+import { Intro } from '@/components/home/Intro'
+import { Services } from '@/components/home/Services'
+import { Work } from '@/components/home/Work'
+import { Stats } from '@/components/home/Stats'
+import { Process } from '@/components/home/Process'
+import { Contact } from '@/components/home/Contact'
 
 interface HomePageProps {
   params: Promise<{ locale: string }>
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const [page, settings] = await Promise.all([
-    getHomepage(),
-    getSiteSettings(),
-  ])
-  
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://example.com'
-  
+  const [home, settings] = await Promise.all([getHomePage(), getSiteSettings()])
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pihaykkoset.fi'
+  const title = home?.seo?.metaTitle || settings?.siteName || 'Pihaykköset Oy'
+  const description = home?.seo?.metaDescription || settings?.siteDescription
+  const og = home?.seo?.ogImage?.asset
+    ? urlFor(home.seo.ogImage.asset).width(1200).height(630).url()
+    : settings?.ogImage?.asset
+    ? urlFor(settings.ogImage.asset).width(1200).height(630).url()
+    : null
+
   return {
-    title: page?.seo?.metaTitle || page?.title || settings?.siteName,
-    description: page?.seo?.metaDescription || settings?.siteDescription,
+    title,
+    description,
     openGraph: {
-      title: page?.seo?.metaTitle || page?.title,
-      description: page?.seo?.metaDescription || settings?.siteDescription,
+      title,
+      description,
       url: siteUrl,
-      images: page?.seo?.ogImage?.asset 
-        ? [{ url: urlFor(page.seo.ogImage.asset).width(1200).height(630).url() }]
-        : settings?.ogImage?.asset
-        ? [{ url: urlFor(settings.ogImage.asset).width(1200).height(630).url() }]
-        : [],
+      images: og ? [{ url: og }] : [],
     },
-    twitter: {
-      title: page?.seo?.metaTitle || page?.title,
-      description: page?.seo?.metaDescription || settings?.siteDescription,
-      images: page?.seo?.ogImage?.asset
-        ? [urlFor(page.seo.ogImage.asset).width(1200).height(630).url()]
-        : settings?.ogImage?.asset
-        ? [urlFor(settings.ogImage.asset).width(1200).height(630).url()]
-        : [],
-    },
-    alternates: {
-      canonical: siteUrl,
-    },
+    twitter: { title, description, images: og ? [og] : [] },
+    alternates: { canonical: siteUrl },
+    robots: home?.seo?.noIndex ? { index: false, follow: false } : undefined,
   }
 }
 
 export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params
   setRequestLocale(locale)
-  
-  const [page, settings] = await Promise.all([
-    getHomepage(),
-    getSiteSettings(),
-  ])
 
-  if (!page) {
-    return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
-        <h1 className="text-4xl font-bold text-gray-900">Welcome to {settings?.siteName || 'Your Website'}</h1>
-        <p className="mt-4 text-lg text-gray-600">
-          Set up your homepage in the <Link href="/studio" className="text-primary-600 underline hover:text-primary-700">CMS Studio</Link>
-        </p>
-        <p className="mt-2 text-sm text-gray-500">
-          Create a new Page and mark it as &quot;Homepage&quot;
-        </p>
-      </div>
-    )
-  }
+  const [home, settings] = await Promise.all([getHomePage(), getSiteSettings()])
 
   return (
-    <SectionRenderer 
-      sections={page.sections} 
-      contactInfo={settings?.contactInfo}
-    />
+    <>
+      <Hero data={home} />
+      <Marquee data={home} />
+      <Intro data={home} />
+      <Services data={home} />
+      <Work data={home} />
+      <Stats data={home} />
+      <Process data={home} />
+      <Contact data={home} contactInfo={settings?.contactInfo} />
+    </>
   )
 }

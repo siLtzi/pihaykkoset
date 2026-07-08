@@ -4,6 +4,7 @@ import { type SchemaTypeDefinition } from 'sanity'
 import { siteSettings } from './documents/siteSettings'
 import { page } from './documents/page'
 import { navigation } from './documents/navigation'
+import { homePage } from './documents/homePage'
 
 // Objects
 import { seo } from './objects/seo'
@@ -22,6 +23,7 @@ import { faqSection } from './sections/faqSection'
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     // Documents
+    homePage,
     siteSettings,
     page,
     navigation,

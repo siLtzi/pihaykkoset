@@ -11,8 +11,9 @@ export const projectId = assertValue(
   'Missing environment variable: NEXT_PUBLIC_SANITY_PROJECT_ID'
 )
 
-// For preview mode
-export const token = process.env.SANITY_API_READ_TOKEN
+// For preview mode (accepts either read or write token)
+export const token =
+  process.env.SANITY_API_READ_TOKEN || process.env.NEXT_PRIVATE_SANITY_WRITE_TOKEN
 
 // For revalidation webhook
 export const revalidateSecret = process.env.SANITY_REVALIDATE_SECRET

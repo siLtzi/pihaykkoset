@@ -1,13 +1,7 @@
 import { StructureBuilder } from 'sanity/structure'
-import { 
-  Settings, 
-  FileText, 
-  Menu, 
-  Globe,
-} from 'lucide-react'
+import { Settings, FileText, Menu, Home } from 'lucide-react'
 
-// Helper to create singleton list item
-const singletonListItem = (
+const singleton = (
   S: StructureBuilder,
   typeName: string,
   title: string,
@@ -17,67 +11,25 @@ const singletonListItem = (
     .title(title)
     .icon(icon)
     .child(
-      S.document()
-        .schemaType(typeName)
-        .documentId(typeName)
-        .title(title)
+      S.document().schemaType(typeName).documentId(typeName).title(title)
     )
 
 export const structure = (S: StructureBuilder) =>
   S.list()
-    .title('Content')
+    .title('Sisältö')
     .items([
-      // Settings
-      S.listItem()
-        .title('Settings')
-        .icon(Settings)
-        .child(
-          S.list()
-            .title('Settings')
-            .items([
-              singletonListItem(S, 'siteSettings', 'Site Settings', Settings),
-              S.divider(),
-              S.listItem()
-                .title('Navigation Menus')
-                .icon(Menu)
-                .child(
-                  S.documentTypeList('navigation')
-                    .title('Navigation Menus')
-                ),
-            ])
-        ),
-      
+      singleton(S, 'homePage', 'Etusivu', Home),
       S.divider(),
-      
-      // Pages
+      singleton(S, 'siteSettings', 'Yritystiedot ja yhteystiedot', Settings),
+      S.divider(),
       S.listItem()
-        .title('Pages')
+        .title('Muut sivut')
         .icon(FileText)
-        .child(
-          S.list()
-            .title('Pages')
-            .items([
-              S.listItem()
-                .title('Homepage')
-                .icon(Globe)
-                .child(
-                  S.documentList()
-                    .title('Homepage')
-                    .filter('_type == "page" && isHomepage == true')
-                ),
-              S.divider(),
-              S.listItem()
-                .title('All Pages')
-                .icon(FileText)
-                .child(
-                  S.documentTypeList('page')
-                    .title('All Pages')
-                ),
-            ])
-        ),
+        .child(S.documentTypeList('page').title('Muut sivut')),
+      S.listItem()
+        .title('Navigaatiot')
+        .icon(Menu)
+        .child(S.documentTypeList('navigation').title('Navigaatiot')),
     ])
 
-// Default document node
-export const defaultDocumentNode = (S: StructureBuilder, { schemaType }: { schemaType: string }) => {
-  return S.document()
-}
+export const defaultDocumentNode = (S: StructureBuilder) => S.document()

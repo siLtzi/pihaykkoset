@@ -411,3 +411,91 @@ export const allPageSlugsQuery = groq`
     "slug": slug.current
   }
 `
+
+// Pihaykköset etusivu (singleton)
+export const homePageQuery = groq`
+  *[_type == "homePage"][0]{
+    brandPrefix,
+    brandSuffix,
+    brandTagline,
+    navItems[]{ label, anchor },
+
+    heroHeadlineLines[]{ text, accent },
+    heroLede,
+    heroPrimaryCtaText,
+    heroPrimaryCtaAnchor,
+    heroSecondaryCtaText,
+    heroSecondaryCtaAnchor,
+    heroBackgroundImage{
+      asset->,
+      hotspot,
+      alt
+    },
+    heroMeta[]{ label, value },
+
+    marqueeItems,
+
+    introEyebrow,
+    introNumber,
+    introNumberSuffix,
+    introTag,
+    introHeadingStart,
+    introHeadingMuted,
+    introHeadingEnd,
+    introLead,
+    introParagraphs,
+
+    servicesEyebrow,
+    servicesHeading,
+    servicesCount,
+    serviceItems[]{
+      title,
+      description,
+      tags,
+      anchor,
+      image{ asset->, hotspot, alt }
+    },
+
+    workHeadingStart,
+    workHeadingAccent,
+    workHeadingEnd,
+    workDescription,
+    workTiles[]{
+      location,
+      category,
+      image{ asset->, hotspot, alt }
+    },
+
+    statItems[]{ value, animate, suffix, label },
+
+    processEyebrow,
+    processHeadingStart,
+    processHeadingMuted,
+    processLead,
+    processSteps[]{ title, description },
+
+    contactBackgroundText,
+    contactHeadingStart,
+    contactHeadingAccent,
+    contactHeadingEnd,
+    contactLead,
+    contactCtaText,
+
+    footerTagline,
+    footerColumns[]{
+      heading,
+      links[]{ label, href }
+    },
+    footerLogotype,
+    footerCopyright,
+    footerAttribution,
+    footerSocials[]{ label, url },
+
+    seo{
+      metaTitle,
+      metaDescription,
+      ogImage{ asset-> },
+      noIndex
+    }
+  }
+`

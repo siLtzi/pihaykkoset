@@ -498,3 +498,100 @@ export interface Article {
   publishedAt?: string
   featured?: boolean
 }
+
+// ─── Pihaykköset Etusivu ──────────────────────────────────────────────
+export interface HomeImage {
+  asset?: { _ref?: string; url?: string }
+  hotspot?: { x: number; y: number }
+  alt?: string
+}
+
+export interface HomeNavItem { label: string; anchor: string }
+export interface HomeHeadlineLine { text: string; accent?: boolean }
+export interface HomeMeta { label?: string; value?: string }
+export interface HomeServiceItem {
+  title: string
+  description?: string
+  tags?: string[]
+  anchor?: string
+  image?: HomeImage
+}
+export interface HomeWorkTile {
+  location?: string
+  category?: string
+  image?: HomeImage
+}
+export interface HomeStatItem {
+  value: string
+  animate?: boolean
+  suffix?: string
+  label?: string
+}
+export interface HomeProcessStep { title: string; description?: string }
+export interface HomeFooterLink { label: string; href?: string }
+export interface HomeFooterColumn { heading: string; links?: HomeFooterLink[] }
+export interface HomeFooterSocial { label: string; url?: string }
+
+export interface HomePage {
+  brandPrefix?: string
+  brandSuffix?: string
+  brandTagline?: string
+  navItems?: HomeNavItem[]
+
+  heroHeadlineLines?: HomeHeadlineLine[]
+  heroLede?: string
+  heroPrimaryCtaText?: string
+  heroPrimaryCtaAnchor?: string
+  heroSecondaryCtaText?: string
+  heroSecondaryCtaAnchor?: string
+  heroBackgroundImage?: HomeImage
+  heroMeta?: HomeMeta[]
+
+  marqueeItems?: string[]
+
+  introEyebrow?: string
+  introNumber?: number
+  introNumberSuffix?: string
+  introTag?: string
+  introHeadingStart?: string
+  introHeadingMuted?: string
+  introHeadingEnd?: string
+  introLead?: string
+  introParagraphs?: string[]
+
+  servicesEyebrow?: string
+  servicesHeading?: string
+  servicesCount?: string
+  serviceItems?: HomeServiceItem[]
+
+  workHeadingStart?: string
+  workHeadingAccent?: string
+  workHeadingEnd?: string
+  workDescription?: string
+  workTiles?: HomeWorkTile[]
+
+  statItems?: HomeStatItem[]
+
+  processEyebrow?: string
+  processHeadingStart?: string
+  processHeadingMuted?: string
+  processLead?: string
+  processSteps?: HomeProcessStep[]
+
+  contactBackgroundText?: string
+  contactHeadingStart?: string
+  contactHeadingAccent?: string
+  contactHeadingEnd?: string
+  contactLead?: string
+  contactCtaText?: string
+
+  footerTagline?: string
+  footerColumns?: HomeFooterColumn[]
+  footerLogotype?: string
+  footerCopyright?: string
+  footerAttribution?: string
+  footerSocials?: HomeFooterSocial[]
+
+  seo?: SEO
+}
+

@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pihaykköset Oy — Piha- ja viherrakentaminen, Oulu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a09;
+    --bg-2: #121210;
+    --bg-3: #1a1917;
+    --paper: #e8e3d9;
+    --ink: #f2ede4;
+    --ink-mute: #7a756a;
+    --ink-low: #4a4640;
+    --rule: #252320;
+    --accent: #ff5b1f;
+    --accent-deep: #c63d0d;
+    --grit: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.22 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: var(--grit);
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 200;
+    mix-blend-mode: overlay;
+  }
+
+  .display {
+    font-family: 'Bebas Neue', 'Impact', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 0.93;
+    text-transform: uppercase;
+  }
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  /* ── SCROLL PROGRESS ─────────────────────────────── */
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 3px;
+    background: var(--rule);
+    z-index: 150;
+  }
+  .scroll-progress::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: var(--progress, 0%);
+    background: var(--accent);
+    box-shadow: 0 0 14px var(--accent);
+  }
+
+  /* ── HEADER ───────────────────────────────────────── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 16px 32px 16px 48px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 32px;
+    background: linear-gradient(180deg, rgba(10,10,9,0.9) 0%, rgba(10,10,9,0) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: padding 0.3s, background 0.3s;
+  }
+  header.shrunk { padding-top: 10px; padding-bottom: 10px; background: rgba(10,10,9,0.95); }
+
+  .brand { display: flex; align-items: baseline; gap: 12px; }
+  .brand .mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    text-transform: uppercase;
+  }
+  .brand .mark span { color: var(--accent); }
+  .brand .est {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--ink-low);
+    text-transform: uppercase;
+    padding-left: 12px;
+    border-left: 1px solid var(--rule);
+  }
+
+  nav.primary { display: flex; gap: 28px; justify-content: center; counter-reset: nav; }
+  nav.primary a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    position: relative;
+    padding: 6px 0;
+    transition: color 0.3s;
+  }
+  nav.primary a::before {
+    content: counter(nav, decimal-leading-zero);
+    counter-increment: nav;
+    color: var(--ink-low);
+    margin-right: 8px;
+    transition: color 0.3s;
+  }
+  nav.primary a::after {
+    content: '';
+    position: absolute; left: 0; right: 0; bottom: -2px;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.6, 0, 0.4, 1);
+  }
+  nav.primary a:hover { color: var(--accent); }
+  nav.primary a:hover::before { color: var(--accent); }
+  nav.primary a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+  .header-cta { display: flex; align-items: center; }
+  .phone-link {
+    color: var(--ink);
+    text-decoration: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .phone-link::before {
+    content: ''; width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.4; transform:scale(0.7); } }
+
+  /* ── HERO ─────────────────────────────────────────── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    max-height: 100svh;
+    padding: 0 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .hero-bg-img {
+    position: absolute; inset: -10%;
+    background:
+      linear-gradient(180deg, rgba(10,10,9,0.5) 0%, rgba(10,10,9,0.25) 40%, rgba(10,10,9,0.92) 100%),
+      url('https://images.unsplash.com/photo-1517911478474-1a700aa46e9d?w=2400&q=80') center/cover;
+    transform: scale(1.1);
+    will-change: transform;
+    animation: heroZoom 20s ease-out forwards;
+  }
+  @keyframes heroZoom { 0% { transform: scale(1.3); } 100% { transform: scale(1.05); } }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, transparent 0 80px, rgba(255,91,31,0.02) 80px 81px);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    padding-bottom: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .hero-headline {
+    font-size: clamp(64px, 12vw, 200px);
+    color: var(--ink);
+    letter-spacing: 0.04em;
+  }
+  .hero-headline .line {
+    display: block;
+    overflow: hidden;
+    padding: 0.02em 0;
+  }
+  .hero-headline .char {
+    display: inline-block;
+    transform: translateY(115%);
+    opacity: 0;
+    will-change: transform, opacity;
+    animation: charRise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .hero-headline .char.space { width: 0.28em; }
+  @keyframes charRise { to { transform: translateY(0); opacity: 1; } }
+  /* Accent word: SAME FONT, just orange */
+  .hero-headline .accent-word {
+    color: var(--accent);
+    display: inline-block;
+    position: relative;
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
+    align-items: end;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+  .hero-lede {
+    font-size: clamp(17px, 1.5vw, 21px);
+    line-height: 1.5;
+    color: var(--paper);
+    max-width: 520px;
+    border-left: 3px solid var(--accent);
+    padding-left: 20px;
+    font-weight: 400;
+  }
+  .hero-actions { display: flex; gap: 16px; align-items: end; justify-content: end; flex-wrap: wrap; }
+
+  .hero-meta {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    padding-top: 14px;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.7s 1.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .hero-meta .item { display: flex; flex-direction: column; gap: 3px; }
+  .hero-meta .label { color: var(--ink-low); }
+  .hero-meta .value { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.05em; color: var(--ink-mute); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #0a0a09;
+    text-decoration: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 17px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 20px 34px;
+    display: inline-flex; align-items: center; gap: 14px;
+    border: 0; cursor: pointer;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--ink);
+    transform: translateY(101%);
+    transition: transform 0.5s cubic-bezier(0.6, 0, 0.4, 1);
+  }
+  .btn-primary:hover::before { transform: translateY(0); }
+  .btn-primary > * { position: relative; z-index: 1; }
+  .btn-primary .arrow { transition: transform 0.4s; display: inline-block; }
+  .btn-primary:hover .arrow { transform: translateX(8px); }
+
+  .btn-ghost {
+    color: var(--ink);
+    text-decoration: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 20px 0;
+    border-bottom: 2px solid var(--ink);
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .btn-ghost:hover { color: var(--accent); border-color: var(--accent); }
+
+  /* ── MARQUEE ──────────────────────────────────────── */
+  .marquee {
+    background: var(--accent);
+    color: #0a0a09;
+    overflow: hidden;
+    padding: 14px 0;
+    border-bottom: 3px solid #0a0a09;
+  }
+  .marquee-track {
+    display: flex; gap: 48px;
+    white-space: nowrap;
+    animation: scroll 38s linear infinite;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  .marquee-track .item { padding: 0 4px; transition: color 0.2s; }
+  .marquee-track .item:hover { color: var(--ink); }
+  .marquee-track .dot { opacity: 0.4; }
+  @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  /* ── REVEAL ──────────────────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  /* ── INTRO ───────────────────────────────────────── */
+  .intro {
+    background: var(--bg);
+    padding: 140px 48px;
+  }
+  .intro-grid {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .intro-label {
+    position: sticky; top: 120px;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+  .intro-label .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 100px;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .intro-label .tag {
+    color: var(--ink-mute);
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+    font-size: 15px;
+    font-weight: 300;
+  }
+
+  .intro-body h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 5vw, 88px);
+    line-height: 1;
+    margin-bottom: 48px;
+    max-width: 20ch;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .intro-body h2 .muted { color: var(--ink-mute); }
+  .intro-body p {
+    font-size: 20px;
+    line-height: 1.55;
+    margin-bottom: 24px;
+    max-width: 56ch;
+    color: var(--paper);
+    font-weight: 300;
+  }
+  .intro-body p.lead { font-size: 22px; color: var(--ink); font-weight: 400; }
+
+  /* ── SECTION HEAD ────────────────────────────────── */
+  .section-head {
+    padding: 80px 48px 40px;
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: end;
+    gap: 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-head h3 {
+    font-size: clamp(48px, 7vw, 130px);
+    line-height: 0.9;
+    letter-spacing: 0.04em;
+  }
+  .section-head .count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--ink-mute);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── SERVICES ────────────────────────────────────── */
+  .services {
+    background: var(--bg-2);
+    padding: 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .service-row {
+    display: grid;
+    grid-template-columns: 80px 1.4fr 2.2fr 1.2fr 60px;
+    align-items: center;
+    padding: 32px 48px;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
+    color: var(--ink);
+    position: relative;
+    cursor: pointer;
+    max-width: 1600px;
+    margin: 0 auto;
+    gap: 24px;
+    overflow: hidden;
+    transition: color 0.4s;
+  }
+  .service-row .bg-image {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transform: scale(1.12);
+    transition: opacity 0.6s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0;
+    filter: brightness(0.35) contrast(1.1);
+  }
+  .service-row:hover .bg-image { opacity: 1; transform: scale(1.02); }
+  .service-row::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: var(--accent);
+    transition: width 0.5s cubic-bezier(0.6, 0, 0.4, 1);
+    z-index: 1;
+    mix-blend-mode: multiply;
+  }
+  .service-row:hover::before { width: 100%; }
+  .service-row > *:not(.bg-image) { position: relative; z-index: 2; }
+
+  .service-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--ink-low);
+    letter-spacing: 0.1em;
+    transition: color 0.3s, transform 0.4s;
+  }
+  .service-row:hover .service-num { color: rgba(10,10,9,0.6); transform: translateX(4px); }
+  .service-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 3.4vw, 52px);
+    line-height: 0.95;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .service-row:hover .service-title { transform: translateX(8px); }
+  .service-desc {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-mute);
+    max-width: 50ch;
+    transition: color 0.3s;
+    font-weight: 300;
+  }
+  .service-row:hover .service-desc { color: rgba(255,255,255,0.9); }
+  .service-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .service-tags span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--rule);
+    padding: 4px 10px;
+    color: var(--ink-mute);
+    transition: all 0.3s;
+  }
+  .service-row:hover .service-tags span { border-color: rgba(255,255,255,0.3); color: var(--ink); background: rgba(0,0,0,0.3); }
+  .service-arrow {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    text-align: right;
+    transition: transform 0.4s cubic-bezier(0.6, 0, 0.4, 1);
+    letter-spacing: 0;
+  }
+  .service-row:hover .service-arrow { transform: translateX(10px) rotate(-45deg); }
+
+  /* ── WORK ────────────────────────────────────────── */
+  .work {
+    background: var(--bg);
+    padding: 120px 48px 80px;
+    overflow: hidden;
+  }
+  .work-head {
+    max-width: 1600px;
+    margin: 0 auto 56px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .work-head h3 {
+    font-size: clamp(48px, 7vw, 130px);
+    line-height: 0.92;
+    max-width: 14ch;
+    letter-spacing: 0.04em;
+  }
+  .work-head h3 .orange { color: var(--accent); }
+  .work-head .desc {
+    max-width: 34ch;
+    color: var(--ink-mute);
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .work-mosaic {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 110px;
+    gap: 10px;
+  }
+  .tile {
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-2);
+  }
+  .tile-inner {
+    position: absolute; inset: 0;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .tile img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s;
+    filter: grayscale(0.4) contrast(1.1) brightness(0.8);
+  }
+  .tile:hover img { transform: scale(1.1); filter: grayscale(0) contrast(1.1) brightness(1); }
+  .tile .meta {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 14px 16px;
+    background: linear-gradient(180deg, transparent, rgba(10,10,9,0.95));
+    color: var(--ink);
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 3;
+  }
+  .tile:hover .meta { transform: translateY(0); }
+  .tile .meta .where { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .tile .meta .what { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-top: 2px; }
+  .tile .idx {
+    position: absolute; top: 14px; left: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.14em;
+    color: var(--ink);
+    z-index: 2;
+    mix-blend-mode: difference;
+  }
+  .tile-1 { grid-column: span 7; grid-row: span 4; }
+  .tile-2 { grid-column: span 5; grid-row: span 2; }
+  .tile-3 { grid-column: span 5; grid-row: span 2; }
+  .tile-4 { grid-column: span 4; grid-row: span 3; }
+  .tile-5 { grid-column: span 4; grid-row: span 3; }
+  .tile-6 { grid-column: span 4; grid-row: span 3; }
+
+  /* ── STATS ───────────────────────────────────────── */
+  .stats {
+    background: var(--bg-3);
+    padding: 90px 48px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .stats-grid {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .stat {
+    padding: 0 32px;
+    border-left: 1px solid var(--rule);
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .stat:first-child { border-left: 0; padding-left: 0; }
+  .stat .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 7vw, 120px);
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .stat .num .orange { color: var(--accent); }
+  .stat .num .counter { display: inline-block; }
+  .stat .label {
+    color: var(--ink-mute);
+    border-top: 1px solid var(--rule);
+    padding-top: 12px;
+    font-weight: 300;
+  }
+
+  /* ── PROCESS ─────────────────────────────────────── */
+  .process {
+    background: var(--bg);
+    padding: 140px 48px;
+  }
+  .process-grid {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+  }
+  .process-head { position: sticky; top: 120px; }
+  .process-head h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 6vw, 100px);
+    line-height: 0.96;
+    margin-bottom: 32px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .process-head h3 .muted { color: var(--ink-mute); }
+  .process-head p { font-size: 18px; color: var(--paper); max-width: 44ch; line-height: 1.6; font-weight: 300; }
+
+  .step {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+    position: relative;
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .step.in { opacity: 1; transform: translateY(0); }
+  .step::after {
+    content: '';
+    position: absolute; left: 0; top: -1px;
+    width: 0; height: 2px;
+    background: var(--accent);
+    transition: width 0.6s cubic-bezier(0.6, 0, 0.4, 1) 0.15s;
+  }
+  .step.in::after { width: 100%; }
+  .step:last-child { border-bottom: 1px solid var(--rule); }
+  .step .step-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    padding-top: 4px;
+  }
+  .step h4 { font-family: 'Bebas Neue', sans-serif; font-size: 30px; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; line-height: 1; }
+  .step p { color: var(--ink-mute); font-size: 15px; line-height: 1.55; max-width: 48ch; font-weight: 300; }
+
+  /* ── CONTACT ─────────────────────────────────────── */
+  .contact {
+    background: var(--paper);
+    color: #1a1a18;
+    padding: 120px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-bg-text {
+    position: absolute; top: -20px; left: 0; right: 0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(160px, 26vw, 420px);
+    color: rgba(10,10,9,0.04);
+    line-height: 0.85;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+    white-space: nowrap;
+    transform: translateX(var(--bgX, 0));
+    will-change: transform;
+  }
+  .contact-inner { max-width: 1600px; margin: 0 auto; position: relative; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 100px;
+    align-items: end;
+  }
+  .contact h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 8vw, 150px);
+    line-height: 0.95;
+    color: #1a1a18;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .contact h3 .orange { color: var(--accent-deep); }
+  .contact p.lead {
+    font-size: 20px; line-height: 1.5;
+    color: #3a3833; max-width: 44ch; font-weight: 300;
+  }
+
+  .contact-card {
+    background: #0a0a09;
+    color: var(--ink);
+    padding: 44px;
+    display: flex; flex-direction: column; gap: 24px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+  }
+  .contact-card::before {
+    content: '';
+    position: absolute; top: -50%; right: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at center, rgba(255,91,31,0.12), transparent 50%);
+    animation: rotate 24s linear infinite;
+  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+  .contact-card > * { position: relative; z-index: 1; }
+  .contact-card .row { display: flex; flex-direction: column; gap: 5px; }
+  .contact-card .row .lbl { font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-low); }
+  .contact-card .row a, .contact-card .row .val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--ink);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .contact-card .row a:hover { color: var(--accent); }
+  .contact-card .big-cta {
+    margin-top: 8px;
+    background: var(--accent);
+    color: #0a0a09;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    font-family: 'Bebas Neue', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 17px;
+    position: relative;
+    overflow: hidden;
+  }
+  .contact-card .big-cta span { position: relative; z-index: 2; }
+  .contact-card .big-cta::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--ink);
+    transform: translateY(101%);
+    transition: transform 0.5s cubic-bezier(0.6, 0, 0.4, 1);
+    z-index: 1;
+  }
+  .contact-card .big-cta:hover::before { transform: translateY(0); }
+
+  /* ── FOOTER ──────────────────────────────────────── */
+  footer {
+    background: #050505;
+    color: var(--ink-mute);
+    padding: 60px 48px 20px;
+    border-top: 1px solid var(--rule);
+  }
+  .footer-grid {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 44px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .footer-brand .mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .footer-brand .mark span { color: var(--accent); }
+  .footer-brand p { max-width: 36ch; font-size: 15px; line-height: 1.5; font-weight: 300; }
+  .footer-col h5 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-low);
+    margin-bottom: 14px;
+  }
+  .footer-col a {
+    display: block;
+    color: var(--ink);
+    text-decoration: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    transition: color 0.2s, padding-left 0.3s;
+  }
+  .footer-col a:hover { color: var(--accent); padding-left: 6px; }
+  .footer-col .addr {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.05em;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .footer-logotype {
+    max-width: 1600px;
+    margin: 48px auto 0;
+    overflow: hidden;
+  }
+  .footer-logotype .text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 18vw, 300px);
+    line-height: 0.85;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--rule);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    transform: translateX(var(--bgX, 0));
+    will-change: transform;
+  }
+
+  .footer-bottom {
+    max-width: 1600px;
+    margin: 20px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-low);
+  }
+  .footer-bottom .socials { display: flex; gap: 16px; }
+  .footer-bottom .socials a { color: var(--ink-mute); text-decoration: none; transition: color 0.2s; }
+  .footer-bottom .socials a:hover { color: var(--accent); }
+
+  /* ── RESPONSIVE ──────────────────────────────────── */
+  @media (max-width: 980px) {
+    nav.primary { display: none; }
+    header { grid-template-columns: 1fr auto; padding: 14px 20px; }
+    .hero { padding: 0 20px; }
+    .hero-content { padding-bottom: 32px; gap: 24px; }
+    .hero-headline { font-size: clamp(48px, 14vw, 100px); }
+    .hero-bottom { grid-template-columns: 1fr; gap: 24px; }
+    .hero-actions { justify-content: start; }
+    .intro, .work, .process, .contact { padding: 80px 20px; }
+    .section-head { padding: 60px 20px 32px; }
+    .intro-grid, .process-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .intro-label, .process-head { position: static; }
+    .service-row { grid-template-columns: 60px 1fr; padding: 24px 20px; gap: 12px; }
+    .service-row .service-desc, .service-row .service-tags, .service-row .service-arrow { display: none; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+    .stat { border-left: 0; padding: 0; }
+    .work-mosaic { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+    .tile-1 { grid-column: span 2; grid-row: span 2; }
+    .tile-2, .tile-3, .tile-4, .tile-5, .tile-6 { grid-column: span 1; grid-row: span 1; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .contact-card { padding: 28px; }
+    footer { padding: 40px 20px 16px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<header id="siteHeader">
+  <div class="brand">
+    <div class="mark">PIHA<span>YKKÖSET</span></div>
+    <div class="est">Oulu / Per. 2014</div>
+  </div>
+  <nav class="primary">
+    <a href="#">Etusivu</a>
+    <a href="#palvelut">Palvelut</a>
+    <a href="#tyot">Työmme</a>
+    <a href="#prosessi">Näin toimimme</a>
+    <a href="#yhteys">Yhteystiedot</a>
+  </nav>
+  <div class="header-cta">
+    <a href="tel:+358445064262" class="phone-link">+358 44 506 4262</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-bg-img" id="heroBg"></div>
+  </div>
+  <div class="hero-content">
+    <h1 class="display hero-headline" id="heroHeadline" aria-label="Pihat, kivet, koneet — kerralla valmiiksi."></h1>
+
+    <div class="hero-bottom">
+      <p class="hero-lede">Rakennamme pihat, kivetykset ja viheralueet, huollamme ne kesät ja talvet, ja tuomme koneet kun niitä tarvitaan. Yksi tekijä alusta loppuun.</p>
+      <div class="hero-actions">
+        <a href="#yhteys" class="btn-primary">
+          <span>Pyydä tarjous</span>
+          <span class="arrow">→</span>
+        </a>
+        <a href="#tyot" class="btn-ghost">Katso töitämme</a>
+      </div>
+    </div>
+
+    <div class="hero-meta">
+      <div class="item">
+        <div class="mono label">Toimiala</div>
+        <div class="value">Piha- ja viherrakentaminen</div>
+      </div>
+      <div class="item">
+        <div class="mono label">Toimialue</div>
+        <div class="value">Oulu ja lähialueet</div>
+      </div>
+      <div class="item">
+        <div class="mono label">Sertifiointi</div>
+        <div class="value">Luotettava Kumppani</div>
+      </div>
+      <div class="item">
+        <div class="mono label">Perustettu</div>
+        <div class="value">2014</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="item">Viherrakentaminen</span><span class="dot">●</span>
+    <span class="item">Koneurakointi</span><span class="dot">●</span>
+    <span class="item">Kivirakentaminen</span><span class="dot">●</span>
+    <span class="item">Maa-ainekset</span><span class="dot">●</span>
+    <span class="item">Pihahuolto</span><span class="dot">●</span>
+    <span class="item">Lumityöt</span><span class="dot">●</span>
+    <span class="item">Leikkialueet</span><span class="dot">●</span>
+    <span class="item">Metsänhoito</span><span class="dot">●</span>
+    <span class="item">Viherrakentaminen</span><span class="dot">●</span>
+    <span class="item">Koneurakointi</span><span class="dot">●</span>
+    <span class="item">Kivirakentaminen</span><span class="dot">●</span>
+    <span class="item">Maa-ainekset</span><span class="dot">●</span>
+    <span class="item">Pihahuolto</span><span class="dot">●</span>
+    <span class="item">Lumityöt</span><span class="dot">●</span>
+    <span class="item">Leikkialueet</span><span class="dot">●</span>
+    <span class="item">Metsänhoito</span><span class="dot">●</span>
+  </div>
+</div>
+
+<!-- INTRO -->
+<section class="intro">
+  <div class="intro-grid">
+    <div class="intro-label">
+      <div class="mono">§ 01 — Tietoa meistä</div>
+      <div class="num"><span class="counter" data-target="10">0</span>v.</div>
+      <div class="tag">Yli vuosikymmen pohjoisessa. Satoja pihoja, kymmeniä kuntakohteita.</div>
+    </div>
+    <div class="intro-body">
+      <h2 class="reveal">Emme tee <span class="muted">pintaremonttia.</span> Rakennamme pihan joka kestää.</h2>
+      <p class="lead reveal">Pihaykköset Oy on oululainen piha- ja viherrakentaja. Hoidamme työn alusta loppuun — suunnittelusta toteutukseen, kiveyksistä koneurakointiin ja kesän nurmenleikkuusta talven lumitöihin.</p>
+      <p class="reveal">Oikein rakennettu piha nostaa kiinteistön arvoa, kestää vuosikymmeniä ja vaatii minimaalisen huollon. Se tehdään kerralla kunnolla — ei oikaisujen kautta.</p>
+      <p class="reveal">Palvelemme yrityksiä, taloyhtiöitä, kuntia ja yksityisasiakkaita. Urakan koko ei ratkaise — tarkkuus ratkaisee.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="palvelut">
+  <div class="section-head">
+    <div class="mono">§ 02</div>
+    <h3 class="display">Palvelut</h3>
+    <div class="count">07 / Osa-aluetta</div>
+  </div>
+
+  <a href="#yhteys" class="service-row">
+    <div class="bg-image" style="background-image:url('https://images.unsplash.com/photo-1558904541-efa843a96f01?w=1600&q=80')"></div>
+    <div class="service-num">01</div>
+    <div class="service-title">Viherrakentaminen</div>
+    <div class="service-desc">Nurmikon kylvö ja siirtonurmi, taimien istutus, kuntta-toimitukset ja -asennukset. Piha joka on sekä toimiva että näyttävä.</div>
+    <div class="service-tags"><span>Nurmikko</span><span>Istutus</span><span>Kuntta</span></div>
+    <div class="service-arrow">→</div>
+  </a>
+  <a href="#yhteys" class="service-row">
+    <div class="bg-image" style="background-image:url('https://images.unsplash.com/photo-1517911478474-1a700aa46e9d?w=1600&q=80')"></div>
+    <div class="service-num">02</div>
+    <div class="service-title">Koneurakointi</div>
+    <div class="service-desc">Bobcat-, kaivinkone- ja pyöräkoneurakointi. Kalusto skaalautuu pienestä pihahommasta isompaan urakointiin.</div>
+    <div class="service-tags"><span>Bobcat</span><span>Kaivinkone</span><span>Pyöräkone</span></div>
+    <div class="service-arrow">→</div>
+  </a>
+  <a href="#yhteys" class="service-row">
+    <div class="bg-image" style="background-image:url('https://images.unsplash.com/photo-1530268729831-4b0b9e170218?w=1600&q=80')"></div>
+    <div class="service-num">03</div>
+    <div class="service-title">Kivirakentaminen</div>
+    <div class="service-desc">Pihakivetykset, pihalaatoitukset, muurit, reunakivet ja luonnonkivityöt. Kestävää jälkeä joka näyttää hyvältä vielä vuosien päästä.</div>
+    <div class="service-tags"><span>Kivetykset</span><span>Muurit</span><span>Luonnonkivi</span></div>
+    <div class="service-arrow">→</div>
+  </a>
+  <a href="#yhteys" class="service-row">
+    <div class="bg-image" style="background-image:url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1600&q=80')"></div>
+    <div class="service-num">04</div>
+    <div class="service-title">Maa-ainestoimitukset</div>
+    <div class="service-desc">Hiekoitussepeli, murskeet, sepelit, kivituhkat, multa, kuorikate, seulottu hiekka, täytemaa ja täytehiekka. Toimitamme perille.</div>
+    <div class="service-tags"><span>Sepeli</span><span>Multa</span><span>Hiekat</span></div>
+    <div class="service-arrow">→</div>
+  </a>
+  <a href="#yhteys" class="service-row">
+    <div class="bg-image" style="background-image:url('https://images.unsplash.com/photo-1505081598304-ed187fa15f0e?w=1600&q=80')"></div>
+    <div class="service-num">05</div>
+    <div class="service-title">Pihahuolto</div>
+    <div class="service-desc">Asfaltin ja kiveysten pesu ja koneharjaus, nurmikon leikkuu, ilmaus ja lannoitus sekä pensaiden leikkaus.</div>
+    <div class="service-tags"><span>Kevät</span><span>Kesä</span><span>Syksy</span></div>
+    <div class="service-arrow">→</div>
+  </a>
+  <a href="#yhteys" class="service-row">
+    <div class="bg-image" style="background-image:url('https://images.unsplash.com/photo-1577327279474-3a3ab46d5d6c?w=1600&q=80')"></div>
+    <div class="service-num">06</div>
+    <div class="service-title">Lumityöt ja talvikunnossapito</div>
+    <div class="service-desc">Hiekoitus, lumenauraus, lumen poisajo ja kattolumien pudotus. Piha turvallisena ja kulkukelpoisena läpi talven.</div>
+    <div class="service-tags"><span>Auraus</span><span>Hiekoitus</span><span>Kattolumi</span></div>
+    <div class="service-arrow">→</div>
+  </a>
+  <a href="#yhteys" class="service-row">
+    <div class="bg-image" style="background-image:url('https://images.unsplash.com/photo-1519181245277-cffeb31da2e3?w=1600&q=80')"></div>
+    <div class="service-num">07</div>
+    <div class="service-title">Leikkialueet ja metsänhoito</div>
+    <div class="service-desc">Leikkipaikkojen ja -kenttien rakentaminen, turva-alustat ja multikumi. Lisäksi raivaussahatyöt ja puunkaadot.</div>
+    <div class="service-tags"><span>Leikkikentät</span><span>Turva-alustat</span><span>Raivaus</span></div>
+    <div class="service-arrow">→</div>
+  </a>
+</section>
+
+<!-- WORK -->
+<section class="work" id="tyot">
+  <div class="work-head">
+    <h3 class="display reveal">Työmme <span class="orange">kestää</span> katsoa läheltäkin.</h3>
+    <p class="desc reveal">Kivi ja asfaltti paljastavat huolimattoman työn armottomasti. Me teemme tarkasti — ja siksi kohteemme näyttävät hyvältä vielä vuosien päästä.</p>
+  </div>
+  <div class="work-mosaic">
+    <div class="tile tile-1"><div class="idx">N° 01</div><div class="tile-inner"><img src="https://images.unsplash.com/photo-1517911478474-1a700aa46e9d?w=1600&q=80" alt="Maanrakennustyömaa"></div><div class="meta"><div class="where">Karjasilta · Oulu</div><div class="what">Liikenneympyrä / Maanrakennus</div></div></div>
+    <div class="tile tile-2"><div class="idx">N° 02</div><div class="tile-inner"><img src="https://images.unsplash.com/photo-1530268729831-4b0b9e170218?w=1200&q=80" alt="Kivetys"></div><div class="meta"><div class="where">Yksityispiha</div><div class="what">Pihakivetys ja muurit</div></div></div>
+    <div class="tile tile-3"><div class="idx">N° 03</div><div class="tile-inner"><img src="https://images.unsplash.com/photo-1558904541-efa843a96f01?w=1200&q=80" alt="Viherrakentaminen"></div><div class="meta"><div class="where">Taloyhtiö · Oulu</div><div class="what">Viherrakentaminen</div></div></div>
+    <div class="tile tile-4"><div class="idx">N° 04</div><div class="tile-inner"><img src="https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&q=80" alt="Maa-aines"></div><div class="meta"><div class="where">Maa-ainestoimitus</div><div class="what">Sepelit ja murskeet</div></div></div>
+    <div class="tile tile-5"><div class="idx">N° 05</div><div class="tile-inner"><img src="https://images.unsplash.com/photo-1505081598304-ed187fa15f0e?w=1200&q=80" alt="Pihahuolto"></div><div class="meta"><div class="where">Kuntakohde</div><div class="what">Pihahuolto</div></div></div>
+    <div class="tile tile-6"><div class="idx">N° 06</div><div class="tile-inner"><img src="https://images.unsplash.com/photo-1605457212717-93a0c14e6cdf?w=1200&q=80" alt="Kaivuukone"></div><div class="meta"><div class="where">Linnanmaa · Oulu</div><div class="what">Koneurakointi</div></div></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat"><div class="num"><span class="counter" data-target="10">0</span><span class="orange">+</span></div><div class="mono label">Vuotta kokemusta</div></div>
+    <div class="stat"><div class="num"><span class="counter" data-target="200">0</span><span class="orange">+</span></div><div class="mono label">Valmistunutta kohdetta</div></div>
+    <div class="stat"><div class="num"><span class="counter" data-target="100">0</span><span class="orange">%</span></div><div class="mono label">Urakat loppuun asti</div></div>
+    <div class="stat"><div class="num">A<span class="orange">A</span></div><div class="mono label">Luotettava Kumppani</div></div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process" id="prosessi">
+  <div class="process-grid">
+    <div class="process-head">
+      <div class="mono" style="color:var(--ink-mute); margin-bottom:24px;">§ 03 — Näin toimimme</div>
+      <h3 class="reveal">Selkeä prosessi. <span class="muted">Ei yllätyksiä.</span></h3>
+      <p class="reveal">Kerralla-oikein-periaatteella. Tarjous on tarjous, aikataulu pitää ja työmaa pidetään siistinä alusta loppuun.</p>
+    </div>
+    <div class="process-list">
+      <div class="step"><div class="step-num">01</div><div><h4>Yhteydenotto</h4><p>Soita tai laita sähköpostia. Kerro kohteesta — me esitämme tarkentavat kysymykset. Ensikäynti on aina maksuton.</p></div></div>
+      <div class="step"><div class="step-num">02</div><div><h4>Katselmus</h4><p>Käymme paikan päällä, mittaamme ja valokuvaamme. Selvitämme maapohjan, kallistukset ja olosuhteet ennen tarjousta.</p></div></div>
+      <div class="step"><div class="step-num">03</div><div><h4>Tarjous</h4><p>Kirjallinen, eritelty tarjous jossa materiaalit, työt ja aikataulu näkyvät omina riveinään. Ei piilokustannuksia.</p></div></div>
+      <div class="step"><div class="step-num">04</div><div><h4>Toteutus</h4><p>Sovittu aloituspäivä pitää. Työmaa pysyy siistinä, tilanteesta pidetään ajan tasalla ja työ tehdään kerralla oikein.</p></div></div>
+      <div class="step"><div class="step-num">05</div><div><h4>Luovutus</h4><p>Kohde käydään yhdessä läpi, viimeistelyt tehdään paikan päällä ja annetaan takuu jolla on oikeasti katetta.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="yhteys">
+  <div class="contact-bg-text" id="contactBgText" aria-hidden="true">OTA YHTEYTTÄ — OTA YHTEYTTÄ —</div>
+  <div class="contact-inner">
+    <div class="contact-grid">
+      <div>
+        <h3 class="reveal">Pyydä <span class="orange">tarjous</span> kohteestasi.</h3>
+        <p class="lead reveal">Teemme kaikenkokoiset urakat — pienestä kotipihasta kunnan ympäristökohteeseen. Vastaamme nopeasti ja ensikäynti on aina maksuton.</p>
+      </div>
+      <div class="contact-card">
+        <div class="row"><div class="lbl">Puhelin</div><a href="tel:+358445064262">+358 44 506 4262</a></div>
+        <div class="row"><div class="lbl">Sähköposti</div><a href="mailto:wiljami@pihaykkoset.fi">wiljami@pihaykkoset.fi</a></div>
+        <div class="row"><div class="lbl">Toimisto</div><div class="val">Allitie 8 A7, 90150 Oulu</div></div>
+        <a href="mailto:wiljami@pihaykkoset.fi" class="big-cta"><span>Lähetä tarjouspyyntö →</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="mark">PIHA<span>YKKÖSET</span></div>
+      <p>Oululainen piha- ja viherrakentaja. Rakennamme, huollamme ja kunnossapidämme — kesät ja talvet.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Palvelut</h5>
+      <a href="#palvelut">Viherrakentaminen</a>
+      <a href="#palvelut">Koneurakointi</a>
+      <a href="#palvelut">Kivirakentaminen</a>
+      <a href="#palvelut">Pihahuolto</a>
+      <a href="#palvelut">Lumityöt</a>
+    </div>
+    <div class="footer-col">
+      <h5>Yritys</h5>
+      <a href="#tyot">Työmme</a>
+      <a href="#prosessi">Näin toimimme</a>
+      <a href="#yhteys">Yhteystiedot</a>
+      <a href="#">Laskutustiedot</a>
+    </div>
+    <div class="footer-col">
+      <h5>Yhteys</h5>
+      <a href="tel:+358445064262">+358 44 506 4262</a>
+      <a href="mailto:wiljami@pihaykkoset.fi">wiljami@pihaykkoset.fi</a>
+      <div class="addr">Allitie 8 A7<br>90150 Oulu</div>
+    </div>
+  </div>
+  <div class="footer-logotype"><div class="text" id="footerLogo">PIHAYKKÖSET — PIHAYKKÖSET — PIHAYKKÖSET —</div></div>
+  <div class="footer-bottom">
+    <div>© 2026 Pihaykköset Oy — Kaikki oikeudet pidätetään</div>
+    <div class="socials"><a href="#">Facebook ↗</a><a href="#">Instagram ↗</a></div>
+    <div>Sivusto: Digipaja Oulu</div>
+  </div>
+</footer>
+
+<script>
+  // ─── HERO TEXT ──────────────────────────────────
+  (function() {
+    const h = document.getElementById('heroHeadline');
+    const lines = [
+      [{ t: 'PIHAT,', a: false }],
+      [{ t: 'KIVET, KONEET', a: false }],
+      [{ t: '— KERRALLA', a: false }],
+      [{ t: 'VALMIIKSI.', a: true }]
+    ];
+    let html = '', d = 0;
+    lines.forEach(line => {
+      html += '<span class="line">';
+      line.forEach(part => {
+        if (part.a) html += '<span class="accent-word">';
+        for (const c of part.t) {
+          if (c === ' ') html += '<span class="char space" style="animation-delay:'+d.toFixed(2)+'s">&nbsp;</span>';
+          else html += '<span class="char" style="animation-delay:'+d.toFixed(2)+'s">'+c+'</span>';
+          d += 0.025;
+        }
+        if (part.a) html += '</span>';
+      });
+      html += '</span>';
+      d += 0.05;
+    });
+    h.innerHTML = html;
+  })();
+
+  // ─── TILE CURSOR-FOLLOW ────────────────────────
+  document.querySelectorAll('.tile').forEach(tile => {
+    const inner = tile.querySelector('.tile-inner');
+    if (!inner) return;
+    tile.addEventListener('mousemove', e => {
+      const r = tile.getBoundingClientRect();
+      inner.style.transform = `translate(${((e.clientX-r.left)/r.width-0.5)*-14}px, ${((e.clientY-r.top)/r.height-0.5)*-14}px)`;
+    });
+    tile.addEventListener('mouseleave', () => { inner.style.transform = 'translate(0,0)'; });
+  });
+
+  // ─── SCROLL EFFECTS ────────────────────────────
+  (function() {
+    const bar = document.getElementById('scrollProgress');
+    const header = document.getElementById('siteHeader');
+    const heroBg = document.getElementById('heroBg');
+    const contactBg = document.getElementById('contactBgText');
+    const footerLogo = document.getElementById('footerLogo');
+    const onScroll = () => {
+      const h = document.documentElement;
+      bar.style.setProperty('--progress', (h.scrollTop/(h.scrollHeight-h.clientHeight))*100+'%');
+      h.scrollTop > 60 ? header.classList.add('shrunk') : header.classList.remove('shrunk');
+      if (heroBg && h.scrollTop < innerHeight*1.2) heroBg.style.transform = 'scale(1.08) translateY('+h.scrollTop*0.25+'px)';
+      [contactBg, footerLogo].forEach((el, i) => {
+        if (!el) return;
+        const r = (el === contactBg ? el.parentElement : el).getBoundingClientRect();
+        const p = Math.max(-1, Math.min(1, (innerHeight-r.top)/(innerHeight+r.height)));
+        el.style.setProperty('--bgX', p * -(i ? 300 : 200) + 'px');
+      });
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // ─── REVEAL ────────────────────────────────────
+  (function() {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal, .step').forEach(el => io.observe(el));
+  })();
+
+  // ─── COUNTERS ──────────────────────────────────
+  (function() {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target, target = +el.dataset.target, start = performance.now();
+        const tick = now => {
+          const t = Math.min(1, (now-start)/1600);
+          el.textContent = Math.floor(target * (1 - (1-t)**3));
+          t < 1 ? requestAnimationFrame(tick) : el.textContent = target;
+        };
+        requestAnimationFrame(tick);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.counter').forEach(c => io.observe(c));
+  })();
+</script>
+
+</body>
+</html>

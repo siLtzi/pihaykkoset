@@ -19,9 +19,11 @@ const builder = createImageUrlBuilder({ projectId, dataset })
 type ImageSource =
   | SanityImage
   | { _ref: string }
-  | { asset: { _ref: string }; alt?: string; hotspot?: { x: number; y: number }; [key: string]: unknown }
+  | { _id: string; url?: string; [key: string]: unknown }
+  | { asset?: { _ref?: string; _id?: string; url?: string; [key: string]: unknown } | null; alt?: string; hotspot?: { x: number; y: number }; [key: string]: unknown }
   | string
 
-export function urlFor(source: ImageSource) {
-  return builder.image(source)
+export function urlFor(source: unknown) {
+  // The builder accepts a wide range of inputs; we type as unknown for flexibility.
+  return builder.image(source as Parameters<typeof builder.image>[0])
 }
